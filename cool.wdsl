@@ -1,0 +1,143 @@
+widget "Main Clock"
+  type: Clock
+  preset: Midnight Blue
+  x: 40
+  y: 40
+  width: 300
+  height: 160
+  24hour: true
+  showseconds: true
+  dateformat: ddd, MMM d
+  alwaysontop: true
+end
+
+widget "Focus Engine"
+  type: Timer
+  preset: Neon Noir
+  x: 40
+  y: 220
+  width: 300
+  height: 180
+  fontsize: 48
+  timer: 1500
+  alwaysontop: true
+end
+
+widget "Session Stopwatch"
+  type: Stopwatch
+  preset: Obsidian
+  x: 40
+  y: 420
+  width: 300
+  height: 140
+  fontsize: 28
+  alwaysontop: true
+end
+
+// -------------------------
+// SYSTEM CONTROL PANEL
+// -------------------------
+
+widget "System Core"
+  type: SystemStats
+  preset: Hacker Green
+  x: 370
+  y: 40
+  width: 260
+  height: 200
+  fontsize: 18
+  alwaysontop: true
+end
+
+widget "Performance Warning Panel"
+  type: CustomText
+  preset: Neon Noir
+  x: 370
+  y: 260
+  width: 260
+  height: 160
+  fontsize: 14
+  align: Left
+  content: CPU SPIKES:\n- Watch background apps\n- Close heavy tabs\n\nMEMORY:\n- Keep under 80%\n- Restart browser if needed
+end
+
+// -------------------------
+// DAILY OPERATIONS BOARD
+// -------------------------
+
+widget "Mission Log"
+  type: StickyNote
+  preset: Sunrise
+  x: 660
+  y: 40
+  width: 320
+  height: 340
+  fontsize: 16
+  align: Left
+  content: 🎯 TODAY OBJECTIVES\n\n1. Finish coding session\n2. Review project structure\n3. Push Git commit\n4. 30 min exercise\n\n⚠ BLOCKERS:\n- Avoid distractions\n- No random YouTube loops
+end
+
+widget "Quick Notes"
+  type: StickyNote
+  preset: Paper White
+  x: 660
+  y: 400
+  width: 320
+  height: 200
+  fontsize: 14
+  content: IDEAS:\n- New game mechanic idea\n- Improve widget DSL\n- Build UI animation layer\n\nBUGS:\n- Timer reset glitch?\n- Weather refresh delay?
+end
+
+// -------------------------
+// ENVIRONMENT + CONTEXT
+// -------------------------
+
+widget "Weather Hub"
+  type: Weather
+  preset: Frosted Glass
+  x: 1010
+  y: 40
+  width: 240
+  height: 160
+  city: Los Angeles
+  alwaysontop: true
+end
+
+widget "System Mood Overlay"
+  type: CustomText
+  preset: Invisible
+  x: 1010
+  y: 220
+  width: 240
+  height: 120
+  fontsize: 20
+  align: Center
+  content: STATUS:\nFOCUSED MODE\nNO DISTRACTIONS ACTIVE
+  opacity: 0.6
+end
+
+// -------------------------
+// MINI DASHBOARD STACK
+// -------------------------
+
+widget "Micro Clock"
+  type: Clock
+  preset: Obsidian
+  x: 1010
+  y: 360
+  width: 240
+  height: 100
+  24hour: true
+  showseconds: false
+end
+
+widget "Break Timer"
+  type: Timer
+  preset: Frosted Glass
+  x: 1010
+  y: 480
+  width: 240
+  height: 120
+  timer: 300
+  fontsize: 28
+end
