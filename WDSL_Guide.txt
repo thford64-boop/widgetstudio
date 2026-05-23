@@ -1,0 +1,204 @@
+========================================
+  WIDGET STUDIO DSL (.wdsl) — USER GUIDE
+========================================
+
+WDSL is a plain-text format for defining desktop widgets in Widget Studio.
+You can write a .wdsl file in any text editor and import it via the app's
+"Import DSL" button, or export your current widgets using "Export DSL".
+
+
+----------------------------------------
+  BASIC STRUCTURE
+----------------------------------------
+
+Every widget starts with a "widget" line and ends with "end".
+
+    widget "My Widget Name"
+      type: Clock
+      x: 100
+      y: 100
+    end
+
+Lines starting with // or # are comments and are ignored.
+You can define as many widgets as you like in one file.
+
+
+----------------------------------------
+  WIDGET TYPES
+----------------------------------------
+
+  Clock        — Displays the current time and date
+  Timer        — Countdown timer
+  Stopwatch    — Counts up from zero
+  StickyNote   — A floating note with custom text
+  SystemStats  — Shows CPU / memory info
+  CustomText   — Static text display
+  Weather      — Weather for a given city
+
+
+----------------------------------------
+  ALL PROPERTIES
+----------------------------------------
+
+--- Identity & Layout ---
+
+  type: Clock               Widget type (see above)
+  x: 100                    Horizontal position in pixels (alias: left)
+  y: 100                    Vertical position in pixels (alias: top)
+  width: 250                Width in pixels (alias: w, minimum: 100)
+  height: 140               Height in pixels (alias: h, minimum: 60)
+
+--- Appearance ---
+
+  preset: Midnight Blue     Apply a named preset (see Presets section)
+  font: Consolas            Font family name (alias: fontfamily)
+  fontsize: 36              Font size in points (alias: size)
+  fontweight: Bold          Font weight — Normal, Bold, Light, etc.
+  align: Center             Text alignment — Left, Center, Right (alias: textalign)
+  opacity: 0.95             Window opacity, 0.1 to 1.0 (alias: alpha)
+
+--- Colors ---
+  Colors use hex format. Background supports AARRGGBB (with alpha channel).
+
+  color: #EAEAEA            Text/foreground color (aliases: foreground, fg)
+  background: #CC16213E     Background color, supports alpha (alias: bg)
+  border: #00D4FF           Border color — also enables the border (alias: bordercolor)
+  noborder:                 Disable the border (no value needed)
+  radius: 12                Corner radius in pixels (alias: cornerradius)
+
+--- Behavior ---
+
+  alwaysontop: true         Keep widget above other windows (alias: ontop)
+                            Accepts: true/false, yes/no, 1/0
+
+--- Clock Options (type: Clock only) ---
+
+  24hour: false             Use 24-hour time format (alias: 24h)
+  showseconds: true         Show seconds in the time display (alias: seconds)
+  dateformat: dddd, MMMM d  .NET date format string (see Date Formats below)
+
+--- Timer Options (type: Timer only) ---
+
+  timer: 1500               Countdown duration in seconds (alias: duration)
+                            Example: 1500 = 25 minutes (Pomodoro)
+
+--- StickyNote / CustomText ---
+
+  content: Your text here   The text to display (alias: text)
+                            Use \n for line breaks within content
+
+--- Weather ---
+
+  city: London              City name for weather data (alias: weathercity)
+
+
+----------------------------------------
+  PRESETS
+----------------------------------------
+
+Presets apply a full visual style in one line. Applying a preset will
+set font, colors, border, and radius — you can then override individual
+properties after the preset line.
+
+Built-in presets:
+
+  Default Dark      — Clean dark glass look
+  Midnight Blue     — Deep navy with cyan accent
+  Neon Noir         — Dark with hot pink glow
+  Hacker Green      — Terminal matrix aesthetic
+  Obsidian          — Pure black, white text
+  Frosted Glass     — Light frosted translucent
+  Paper White       — Minimal clean white card
+  Sunrise           — Warm peach and orange
+  Vaporwave         — (retro pink/purple palette)
+  Invisible         — Fully transparent background
+
+If a preset name is not found, an error is logged and defaults are used.
+
+
+----------------------------------------
+  DATE FORMAT STRINGS (for Clock)
+----------------------------------------
+
+These follow standard .NET date format patterns:
+
+  dddd, MMMM d      Monday, January 5
+  MM/dd/yyyy        01/05/2026
+  ddd, MMM d        Mon, Jan 5
+  (none)            Hides the date entirely
+
+
+----------------------------------------
+  FULL EXAMPLE
+----------------------------------------
+
+// My Widget Layout
+// Saved: May 2026
+
+widget "Morning Clock"
+  type: Clock
+  preset: Midnight Blue
+  x: 50
+  y: 50
+  width: 260
+  height: 140
+  24hour: false
+  showseconds: true
+  dateformat: dddd, MMMM d
+  alwaysontop: true
+end
+
+widget "Pomodoro"
+  type: Timer
+  preset: Neon Noir
+  fontsize: 42
+  timer: 1500
+  x: 50
+  y: 220
+  width: 220
+  height: 150
+  alwaysontop: true
+end
+
+widget "Today's Tasks"
+  type: StickyNote
+  preset: Sunrise
+  fontsize: 14
+  fontweight: Normal
+  align: Left
+  x: 320
+  y: 50
+  width: 240
+  height: 200
+  content: ✅ Morning standup 9am\n📦 Deploy build\n💬 1:1 at 3pm
+end
+
+widget "System"
+  type: SystemStats
+  preset: Obsidian
+  fontsize: 20
+  x: 320
+  y: 280
+  width: 220
+  height: 120
+end
+
+
+----------------------------------------
+  TIPS
+----------------------------------------
+
+- Export your current widgets from the app to get a starting template.
+- You can stack a preset and then override specific properties below it.
+- The background color supports an alpha channel (AARRGGBB format),
+  so #CC16213E = 80% opacity dark blue.
+- Minimum widget size is 100x60 pixels; smaller values are clamped.
+- Unknown keys will log an error but won't prevent the rest of the
+  file from loading.
+- An "end" without an opening "widget" is silently ignored.
+- A "widget" block missing its "end" will log an error.
+
+
+========================================
+  Widget Studio — WDSL Reference v1.0
+========================================
