@@ -1,204 +1,583 @@
-========================================
-  WIDGET STUDIO DSL (.wdsl) — USER GUIDE
-========================================
-
-WDSL is a plain-text format for defining desktop widgets in Widget Studio.
-You can write a .wdsl file in any text editor and import it via the app's
-"Import DSL" button, or export your current widgets using "Export DSL".
-
-
-----------------------------------------
-  BASIC STRUCTURE
-----------------------------------------
-
-Every widget starts with a "widget" line and ends with "end".
-
-    widget "My Widget Name"
-      type: Clock
-      x: 100
-      y: 100
-    end
-
-Lines starting with // or # are comments and are ignored.
-You can define as many widgets as you like in one file.
+================================================================================
+  WIDGET STUDIO DSL — HOW TO USE  (H2U guide)
+================================================================================
+  DSL = "Domain Specific Language" — basically a simple text file where each
+  line describes one setting for a widget.  No coding needed.  Just a plain
+  .txt or .wdsl file you write in Notepad and import into the app.
+================================================================================
 
 
-----------------------------------------
+QUICK START — make your first widget in 60 seconds
+----------------------------------------------------
+1.  Open Notepad (or any text editor)
+2.  Type this:
+
+        widget "My Clock"
+          type: Clock
+          preset: Midnight Blue
+          x: 100
+          y: 100
+          width: 260
+          height: 130
+        end
+
+3.  Save the file as  myfirst.wdsl  (or just myfirst.txt — both work)
+4.  In Widget Studio click  ⬆ Import DSL
+5.  Pick your file.  Done — your widget appears in the list.
+
+That's literally all there is to it.  Everything below just adds more options.
+
+
+================================================================================
+  THE RULES  (3 of them, that's it)
+================================================================================
+
+  RULE 1 — Every widget starts with  widget "Name"  and ends with  end
+
+        widget "My Widget"
+          ...settings go here...
+        end
+
+  RULE 2 — Settings use a colon:    key: value
+        Each setting goes on its own line.
+        Indent with spaces (optional but makes it readable).
+
+  RULE 3 — Comments start with  //  or  #
+        The app ignores them completely — use them for notes to yourself.
+
+        // This is a comment
+        # This is also a comment
+
+
+================================================================================
   WIDGET TYPES
-----------------------------------------
+================================================================================
+  Set the type with:   type: <TypeName>
 
-  Clock        — Displays the current time and date
-  Timer        — Countdown timer
-  Stopwatch    — Counts up from zero
-  StickyNote   — A floating note with custom text
-  SystemStats  — Shows CPU / memory info
-  CustomText   — Static text display
-  Weather      — Weather for a given city
-
-
-----------------------------------------
-  ALL PROPERTIES
-----------------------------------------
-
---- Identity & Layout ---
-
-  type: Clock               Widget type (see above)
-  x: 100                    Horizontal position in pixels (alias: left)
-  y: 100                    Vertical position in pixels (alias: top)
-  width: 250                Width in pixels (alias: w, minimum: 100)
-  height: 140               Height in pixels (alias: h, minimum: 60)
-
---- Appearance ---
-
-  preset: Midnight Blue     Apply a named preset (see Presets section)
-  font: Consolas            Font family name (alias: fontfamily)
-  fontsize: 36              Font size in points (alias: size)
-  fontweight: Bold          Font weight — Normal, Bold, Light, etc.
-  align: Center             Text alignment — Left, Center, Right (alias: textalign)
-  opacity: 0.95             Window opacity, 0.1 to 1.0 (alias: alpha)
-
---- Colors ---
-  Colors use hex format. Background supports AARRGGBB (with alpha channel).
-
-  color: #EAEAEA            Text/foreground color (aliases: foreground, fg)
-  background: #CC16213E     Background color, supports alpha (alias: bg)
-  border: #00D4FF           Border color — also enables the border (alias: bordercolor)
-  noborder:                 Disable the border (no value needed)
-  radius: 12                Corner radius in pixels (alias: cornerradius)
-
---- Behavior ---
-
-  alwaysontop: true         Keep widget above other windows (alias: ontop)
-                            Accepts: true/false, yes/no, 1/0
-
---- Clock Options (type: Clock only) ---
-
-  24hour: false             Use 24-hour time format (alias: 24h)
-  showseconds: true         Show seconds in the time display (alias: seconds)
-  dateformat: dddd, MMMM d  .NET date format string (see Date Formats below)
-
---- Timer Options (type: Timer only) ---
-
-  timer: 1500               Countdown duration in seconds (alias: duration)
-                            Example: 1500 = 25 minutes (Pomodoro)
-
---- StickyNote / CustomText ---
-
-  content: Your text here   The text to display (alias: text)
-                            Use \n for line breaks within content
-
---- Weather ---
-
-  city: London              City name for weather data (alias: weathercity)
+  Clock          — Live clock.  Shows time, optionally date too.
+  Timer          — Countdown timer with start/pause/reset buttons.
+  Stopwatch      — Counts up.  Start/pause/reset buttons.
+  Countdown      — Counts down to a specific real-world date (e.g. Christmas).
+  StickyNote     — Multiline text note stuck to your desktop.
+  CustomText     — Single text label.  Good for quotes, reminders, one-liners.
+  Quote          — Shows one quote at a time, cycles through a list.
+  Separator      — A thin horizontal line, optionally with a label above it.
+  SystemStats    — Live CPU % and RAM usage.
+  DiskUsage      — Shows how full a drive is (e.g. your C: drive).
+  NetworkStats   — Live upload and download speed.
+  Battery        — Battery percentage and charging status.
+  Weather        — Displays a city name (placeholder — see EXTENDING below).
 
 
-----------------------------------------
-  PRESETS
-----------------------------------------
+================================================================================
+  PRESETS  (the easiest way to make things look good fast)
+================================================================================
+  One line gives your widget a whole color scheme + font combo:
 
-Presets apply a full visual style in one line. Applying a preset will
-set font, colors, border, and radius — you can then override individual
-properties after the preset line.
+        preset: Midnight Blue
 
-Built-in presets:
+  DARK presets:
+    Default Dark     Midnight Blue     Neon Noir     Hacker Green
+    Obsidian         Deep Space        Carbon Fiber  Electric Blue
 
-  Default Dark      — Clean dark glass look
-  Midnight Blue     — Deep navy with cyan accent
-  Neon Noir         — Dark with hot pink glow
-  Hacker Green      — Terminal matrix aesthetic
-  Obsidian          — Pure black, white text
-  Frosted Glass     — Light frosted translucent
-  Paper White       — Minimal clean white card
-  Sunrise           — Warm peach and orange
-  Vaporwave         — (retro pink/purple palette)
-  Invisible         — Fully transparent background
+  LIGHT presets:
+    Frosted Glass    Paper White       Sunrise       Cream    Sky Blue
 
-If a preset name is not found, an error is logged and defaults are used.
+  MINIMAL presets (low/no background — floats on your desktop):
+    Invisible        Shadow Text       Ghost         Bare Bones
 
+  RETRO presets:
+    Retro Orange     Vaporwave         DOS Green     Amber CRT
 
-----------------------------------------
-  DATE FORMAT STRINGS (for Clock)
-----------------------------------------
+  VIVID presets:
+    Synthwave        Tropical          Candy         Forest    Ocean
 
-These follow standard .NET date format patterns:
+  TIP: Apply a preset first, then override individual colors/fonts after it.
+  The preset just sets defaults — anything you add after it wins.
 
-  dddd, MMMM d      Monday, January 5
-  MM/dd/yyyy        01/05/2026
-  ddd, MMM d        Mon, Jan 5
-  (none)            Hides the date entirely
+        preset: Hacker Green
+        color: #FFFFFF          ← overrides just the text color
 
 
-----------------------------------------
-  FULL EXAMPLE
-----------------------------------------
+================================================================================
+  POSITION & SIZE
+================================================================================
+  x: 100          ← pixels from the LEFT edge of your screen
+  y: 200          ← pixels from the TOP edge of your screen
+  width: 260      ← widget width in pixels  (minimum 100)
+  height: 130     ← widget height in pixels (minimum 60)
 
-// My Widget Layout
-// Saved: May 2026
-
-widget "Morning Clock"
-  type: Clock
-  preset: Midnight Blue
-  x: 50
-  y: 50
-  width: 260
-  height: 140
-  24hour: false
-  showseconds: true
-  dateformat: dddd, MMMM d
-  alwaysontop: true
-end
-
-widget "Pomodoro"
-  type: Timer
-  preset: Neon Noir
-  fontsize: 42
-  timer: 1500
-  x: 50
-  y: 220
-  width: 220
-  height: 150
-  alwaysontop: true
-end
-
-widget "Today's Tasks"
-  type: StickyNote
-  preset: Sunrise
-  fontsize: 14
-  fontweight: Normal
-  align: Left
-  x: 320
-  y: 50
-  width: 240
-  height: 200
-  content: ✅ Morning standup 9am\n📦 Deploy build\n💬 1:1 at 3pm
-end
-
-widget "System"
-  type: SystemStats
-  preset: Obsidian
-  fontsize: 20
-  x: 320
-  y: 280
-  width: 220
-  height: 120
-end
+  Not sure what numbers to use?  Just put the widget somewhere, drag it to
+  where you want it in the app, then do Export DSL to capture the position.
 
 
-----------------------------------------
-  TIPS
-----------------------------------------
+================================================================================
+  COLORS
+================================================================================
+  All colors are hex codes.  Two formats work:
 
-- Export your current widgets from the app to get a starting template.
-- You can stack a preset and then override specific properties below it.
-- The background color supports an alpha channel (AARRGGBB format),
-  so #CC16213E = 80% opacity dark blue.
-- Minimum widget size is 100x60 pixels; smaller values are clamped.
-- Unknown keys will log an error but won't prevent the rest of the
-  file from loading.
-- An "end" without an opening "widget" is silently ignored.
-- A "widget" block missing its "end" will log an error.
+    #RRGGBB        — solid color             e.g.  #FF0000  (red)
+    #AARRGGBB      — color with transparency  e.g.  #CC16213E  (dark blue, 80% opaque)
+
+  The AA at the front is "alpha" — how solid it is:
+    FF = 100% solid    CC = 80%    AA = 67%    80 = 50%    44 = 27%    00 = invisible
+
+  color: #EAEAEA            ← text / foreground color
+  background: #CC16213E     ← background color (supports transparency)
+  border: #2A2A4A           ← border color (also turns the border on)
+  accent: #00D4FF           ← used for bars, highlights, button colors
+  secondary: #AAAAAA        ← secondary text, bar backgrounds
 
 
-========================================
-  Widget Studio — WDSL Reference v1.0
-========================================
+================================================================================
+  GRADIENTS
+================================================================================
+  Make the background fade from one color to another:
+
+        background: #FF1A0050
+        gradient: true
+        gradientend: #FF500020
+        gradientdir: Vertical
+
+  gradientdir options:   Vertical  /  Horizontal  /  Diagonal
+
+
+================================================================================
+  DROP SHADOW
+================================================================================
+        shadow: #AA000000       ← shadow color (AA = how dark)
+        shadowblur: 20          ← how blurry/spread the shadow is
+        shadowx: 0              ← horizontal offset (negative = left)
+        shadowy: 4              ← vertical offset (positive = down)
+
+  Set shadowblur: 0 to turn the shadow off entirely.
+
+
+================================================================================
+  BORDER & CORNERS
+================================================================================
+  border: #2A2A4A       ← sets border color AND turns it on
+  noborder:             ← removes the border (no value needed)
+  borderthickness: 2    ← line width in pixels (default is 1)
+  radius: 12            ← corner roundness.  0 = sharp corners, 20+ = very round
+
+
+================================================================================
+  FONTS & TEXT
+================================================================================
+  font: Segoe UI            ← any font installed on your Windows PC
+  fontsize: 32              ← size in points
+  fontweight: Normal        ← Thin / Light / Normal / SemiBold / Bold / Black
+  fontstyle: Normal         ← Normal / Italic / Oblique
+  italic: true              ← shorthand for fontstyle: Italic
+  align: Center             ← Left / Center / Right
+  lineheight: 1.5           ← spacing between lines (default is 1.2)
+  letterspacing: 2          ← extra space between characters (0 = default)
+
+
+================================================================================
+  BEHAVIOR
+================================================================================
+  alwaysontop: true         ← widget floats above all other windows (default true)
+  clickthrough: true        ← mouse clicks pass through the widget (good for overlays)
+  opacity: 0.85             ← 0.0 = invisible,  1.0 = fully solid
+  padding: 12               ← space between the edge and the content inside
+                               Can also be: padding: 8,4       (top/bottom, sides)
+                                        or: padding: 8,4,8,4   (top, right, bottom, left)
+
+
+================================================================================
+  CLOCK OPTIONS
+================================================================================
+  24hour: true              ← true = 24h (14:30),  false = 12h (2:30 PM)
+  showseconds: true         ← show or hide seconds
+  showdate: true            ← show a date line below the time
+  dateformat: dddd, MMMM d  ← how the date looks (see DATE FORMATS below)
+  blinkseparator: true      ← colon blinks every second
+  showmilliseconds: true    ← for stopwatch — show hundredths of a second
+  clockformat: HH:mm:ss     ← custom time format — overrides 24hour/showseconds
+                               (uses standard .NET date format codes)
+
+  TIMEZONE CLOCKS:
+  timezone: Tokyo Standard Time   ← show a different timezone
+  showtimezone: true              ← show the timezone abbreviation (e.g. JST)
+  timezone: local                 ← or blank — uses your system timezone
+
+  Common timezone names (copy exactly as shown):
+    Eastern Standard Time       Central Standard Time
+    Mountain Standard Time      Pacific Standard Time
+    GMT Standard Time           Central European Standard Time
+    Tokyo Standard Time         China Standard Time
+    AUS Eastern Standard Time   India Standard Time
+
+  label: Tokyo              ← small text shown above the time
+  showlabel: true
+
+
+================================================================================
+  DATE FORMATS  (used with dateformat:)
+================================================================================
+  dddd, MMMM d    →  Monday, January 6
+  ddd, MMM d      →  Mon, Jan 6
+  MM/dd/yyyy      →  01/06/2025
+  dd MMM yyyy     →  06 Jan 2025
+  ddd d MMM       →  Mon 6 Jan
+  (none)          →  hides the date line
+
+  You can also write your own:
+    d = day number      dd = zero-padded day    ddd = short name   dddd = full name
+    M = month number    MM = zero-padded month  MMM = short name   MMMM = full name
+    yy = 2-digit year   yyyy = 4-digit year
+
+
+================================================================================
+  TIMER OPTIONS
+================================================================================
+  timer: 300              ← duration in seconds  (300 = 5 minutes)
+  timer: 5:00             ← or use mm:ss format  (easier to read)
+  timer: 1:30:00          ← or hh:mm:ss for hours
+
+  timerloop: true         ← auto-restarts when it hits zero
+  label: 🍅 Pomodoro      ← text shown above the timer
+  showlabel: true
+
+
+================================================================================
+  COUNTDOWN-TO-DATE OPTIONS
+================================================================================
+  targetdate: 2026-01-01 00:00:00    ← the date to count down to
+  countdownformat: dhms              ← which units to show:
+                                         d = days  h = hours  m = minutes  s = seconds
+                                         Use any combo:  d / dh / dhm / dhms / ms
+  countdownlabel: 🎄 Until Christmas ← label shown above the countdown
+
+
+================================================================================
+  STICKY NOTE & CUSTOM TEXT
+================================================================================
+  content: Write your text here
+
+  For multiple lines, use  \n  where you want a line break:
+        content: Line one\nLine two\nLine three
+
+  For a tab indent, use  \t:
+        content: \tIndented line
+
+  TIP: combine with  align: Left  and  lineheight: 1.5  for a readable note.
+
+
+================================================================================
+  QUOTE WIDGET
+================================================================================
+  quotes: First quote|Second quote|Third quote
+
+  Separate quotes with a pipe character  |
+  The widget cycles through them automatically.
+
+  rotatetime: 20          ← seconds between each quote change (default 30)
+  quotedelimiter: |       ← change the separator if your quotes contain pipes
+
+
+================================================================================
+  SYSTEM STATS OPTIONS
+================================================================================
+  showcpubar: true        ← show a bar graph for CPU usage
+  showrambar: true        ← show a bar graph for RAM usage
+  accent: #00FF88         ← color of the bars
+  label: My PC            ← label above the stats
+
+
+================================================================================
+  DISK USAGE OPTIONS
+================================================================================
+  drive: C                ← which drive to monitor (just the letter, no colon)
+  showdisklabel: true     ← show "Drive C:" above the usage number
+
+
+================================================================================
+  NETWORK STATS OPTIONS
+================================================================================
+  interface: Auto         ← Auto = use all active adapters combined
+                             Or type the exact adapter name (e.g. "Wi-Fi", "Ethernet")
+  showunit: true          ← show KB/s or MB/s after the numbers
+
+
+================================================================================
+  WEATHER OPTIONS
+================================================================================
+  city: New York          ← city name to display
+
+  NOTE: The weather widget currently just shows the city name.
+  To get live weather data you'd need to add an API key — see the README.
+
+
+================================================================================
+  PUTTING IT ALL TOGETHER — real examples
+================================================================================
+
+---- MINIMAL FLOATING CLOCK (no background, just text on your wallpaper) ----
+
+  widget "Float"
+    type: Clock
+    preset: Invisible
+    fontsize: 48
+    fontweight: Light
+    24hour: true
+    showseconds: false
+    showdate: false
+    clickthrough: true
+    x: 50
+    y: 50
+    width: 220
+    height: 80
+  end
+
+
+---- POMODORO TIMER ----
+
+  widget "Pomodoro"
+    type: Timer
+    preset: Neon Noir
+    fontsize: 42
+    timer: 25:00
+    label: 🍅 Focus Time
+    showlabel: true
+    timerloop: false
+    x: 20
+    y: 200
+    width: 240
+    height: 160
+  end
+
+
+---- WORLD CLOCK (Tokyo) ----
+
+  widget "Tokyo Time"
+    type: Clock
+    preset: Deep Space
+    timezone: Tokyo Standard Time
+    showtimezone: true
+    24hour: true
+    showdate: true
+    dateformat: ddd, MMM d
+    label: Tokyo 🇯🇵
+    showlabel: true
+    fontsize: 34
+    x: 300
+    y: 20
+    width: 240
+    height: 130
+  end
+
+
+---- STICKY TASK LIST ----
+
+  widget "Today"
+    type: StickyNote
+    preset: Sunrise
+    fontsize: 14
+    fontweight: Normal
+    align: Left
+    lineheight: 1.6
+    padding: 14,12
+    content: ✅ 9am standup\n📦 Deploy build\n🔎 Review PR #42\n📝 Update docs
+    x: 20
+    y: 350
+    width: 240
+    height: 200
+  end
+
+
+---- FANCY GRADIENT CLOCK ----
+
+  widget "Gradient"
+    type: Clock
+    color: #FFFFFF
+    background: #FF1A0050
+    gradient: true
+    gradientend: #FF500020
+    gradientdir: Diagonal
+    radius: 18
+    border: #9040FF
+    borderthickness: 2
+    shadow: #AA9040FF
+    shadowblur: 20
+    shadowy: 4
+    font: Segoe UI Light
+    fontsize: 36
+    24hour: true
+    showdate: true
+    dateformat: ddd d MMM
+    x: 900
+    y: 20
+    width: 260
+    height: 140
+  end
+
+
+---- SYSTEM MONITOR WITH BARS ----
+
+  widget "System"
+    type: SystemStats
+    preset: Obsidian
+    fontsize: 22
+    showcpubar: true
+    showrambar: true
+    accent: #00FF88
+    x: 20
+    y: 570
+    width: 240
+    height: 170
+  end
+
+
+---- ROTATING QUOTES ----
+
+  widget "Motivation"
+    type: Quote
+    preset: Vaporwave
+    fontsize: 15
+    fontstyle: Italic
+    align: Center
+    lineheight: 1.6
+    rotatetime: 20
+    quotes: Work smarter, not harder.|Done is better than perfect.|Stay curious, stay hungry.|Move fast, learn faster.
+    x: 280
+    y: 570
+    width: 280
+    height: 140
+  end
+
+
+---- MULTI-WIDGET FILE (combine as many as you want in one file) ----
+
+  widget "Clock"
+    type: Clock
+    preset: Midnight Blue
+    x: 20
+    y: 20
+    width: 240
+    height: 120
+  end
+
+  widget "Tasks"
+    type: StickyNote
+    preset: Sunrise
+    fontsize: 13
+    align: Left
+    content: - Check email\n- Team meeting 2pm\n- Gym after work
+    x: 20
+    y: 160
+    width: 240
+    height: 160
+  end
+
+  widget "CPU"
+    type: SystemStats
+    preset: Hacker Green
+    showcpubar: true
+    showrambar: true
+    x: 280
+    y: 20
+    width: 220
+    height: 160
+  end
+
+
+================================================================================
+  TIPS & TRICKS
+================================================================================
+
+  1.  EXPORT FIRST, EDIT AFTER
+      The easiest way to learn the DSL is to set up a widget in the app GUI,
+      click ⬇ Export DSL, then open the exported file and see exactly what
+      the app wrote.  Edit those values and re-import.
+
+  2.  ONE FILE, MANY WIDGETS
+      A single .wdsl file can contain as many widget blocks as you want.
+      Great for saving your full desktop layout and restoring it later.
+
+  3.  PRESET + OVERRIDES
+      Apply a preset for the base look, then override only what you want
+      to change.  Much easier than specifying every value from scratch.
+
+        preset: Midnight Blue    ← base colors and font
+        fontsize: 48             ← override just the size
+        color: #FFFFFF           ← override just the text color
+
+  4.  COMMENTS ARE YOUR FRIEND
+      Use  //  to leave notes — especially useful in multi-widget files:
+
+        // ── CLOCKS ──────────────
+        widget "Local Time" ... end
+        widget "Tokyo" ...     end
+
+        // ── MONITORS ─────────────
+        widget "CPU" ...       end
+
+  5.  ERRORS ARE SHOWN ON IMPORT
+      If a line has an unknown property or a typo, the app shows a warning
+      after import listing the bad lines.  The other widgets still import fine.
+
+  6.  CLICKTHROUGH FOR OVERLAYS
+      Set  clickthrough: true  to make a widget completely mouse-transparent.
+      Clicks pass straight through to whatever's behind it — perfect for
+      a clock you want floating over a game or video.
+
+  7.  TRANSPARENCY IN BACKGROUNDS
+      The first two hex digits in an 8-digit color are the opacity:
+        #FF...  = fully solid
+        #CC...  = slightly see-through  (good for a frosted glass look)
+        #88...  = half transparent
+        #44...  = mostly transparent
+        #00...  = invisible (the color does nothing)
+
+  8.  SAVE YOUR LAYOUTS
+      Before rearranging your desktop, do Export DSL to save a snapshot.
+      Re-import any time to restore all your widgets exactly where they were.
+
+
+================================================================================
+  QUICK REFERENCE CARD
+================================================================================
+
+  STRUCTURE         widget "Name" ... end
+  COMMENT           // text  or  # text
+
+  TYPE              type: Clock / Timer / Stopwatch / Countdown /
+                          StickyNote / CustomText / Quote / Separator /
+                          SystemStats / DiskUsage / NetworkStats /
+                          Battery / Weather
+
+  PRESET            preset: Midnight Blue  (see full list above)
+  POSITION          x: 100   y: 200   width: 260   height: 130
+  OPACITY           opacity: 0.9            (0.1 – 1.0)
+  ALWAYS ON TOP     alwaysontop: true/false
+  CLICK-THROUGH     clickthrough: true/false
+
+  COLORS            color: #RRGGBB         background: #AARRGGBB
+                    border: #RRGGBB        accent: #RRGGBB
+
+  GRADIENT          gradient: true   gradientend: #...   gradientdir: Vertical
+  SHADOW            shadow: #AA000000   shadowblur: 20   shadowx: 0   shadowy: 4
+  BORDER            border: #...   borderthickness: 2   radius: 12   noborder:
+
+  FONT              font: Segoe UI   fontsize: 32   fontweight: Bold
+                    italic: true   align: Left/Center/Right   lineheight: 1.5
+
+  CLOCK             24hour:true  showseconds:true  showdate:true  dateformat:dddd,MMMM d
+                    timezone: Eastern Standard Time   showtimezone: true
+                    blinkseparator: true   clockformat: HH:mm:ss
+
+  TIMER             timer: 5:00   timerloop: true   label: Text   showlabel: true
+  COUNTDOWN         targetdate: 2026-01-01   countdownformat: dhms   countdownlabel: Until
+  CONTENT           content: Text here   (use \n for new line, \t for tab)
+  QUOTES            quotes: Quote one|Quote two   rotatetime: 30
+  STATS             showcpubar: true   showrambar: true
+  DISK              drive: C   showdisklabel: true
+  NETWORK           interface: Auto   showunit: true
+  WEATHER           city: New York
+
+================================================================================
+  Widget Studio DSL H2U Guide — end of file
+================================================================================
