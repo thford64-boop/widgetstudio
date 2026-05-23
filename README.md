@@ -1,1 +1,1 @@
-get the zip from releses!
+get the zip from releases!
